@@ -13,7 +13,7 @@ namespace RevitCopilot.Model
         private string InqueryChatgpt(string content)
         {
             ChatGPTClient cgc = new ChatGPTClient("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-            cgc.CreateCompletions("abc", 
+            cgc.CreateCompletions("hoge", 
                 "あなたはRevitアドインの開発者です。" +
                 "ユーザーの問い合わせに返答するためのC#クラスとメソッドを作成してください。" +
                 "以下のルールを必ず守ってください。" +
@@ -22,7 +22,7 @@ namespace RevitCopilot.Model
                 "・メソッドの引数は(Autodesk.Revit.DB.Document document)とする" +
                 "・static修飾子は使用しない"
                 );
-            var res = cgc.Ask("abc", content);
+            var res = cgc.Ask("hoge", content);
             if(res != null) { return res.GetMessageContent(); }
             return null;
         }

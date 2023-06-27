@@ -6,7 +6,6 @@ using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.UI;
-using RevitCopilot.Forms;
 using RevitCopilot.Properties;
 using System.Windows.Interop;
 
@@ -26,7 +25,7 @@ namespace RevitCopilot
                 };
             panel.AddItem(button);
 
-            // ドッカブルペインの作成＆設定
+            // DockablePaneの作成＆設定
             var dockablePane = new RevitCopilotView();
             DockablePaneProviderData dockablePaneProviderData = new DockablePaneProviderData
             {
@@ -39,7 +38,7 @@ namespace RevitCopilot
             };
             dockablePane.SetupDockablePane(dockablePaneProviderData);
 
-            // ドッカブルペインの登録
+            // DockablePaneの登録
             DockablePaneId dpid = new DockablePaneId(new Guid("{D7C963CE-B7CA-426A-8D51-6E8254D21157}"));
             a.RegisterDockablePane(dpid, "RevitCopilot Window", dockablePane);
 
@@ -49,22 +48,26 @@ namespace RevitCopilot
 
             return Result.Succeeded;
         }
+
         private void DocumentOpened(object sender, DocumentOpenedEventArgs e)
         {
             // Revitドキュメントを設定
             var res = RevitDocuments.SetRevitDocuments(e.Document);
             Debug.Assert(res);
         }
+
         public Result OnShutdown(UIControlledApplication a)
         {
             return Result.Succeeded;
         }
+
         private void DocumentChanged(object sender, DocumentChangedEventArgs e)
         {
             // Revitドキュメントを設定
             var res = RevitDocuments.SetRevitDocuments(e.GetDocument());
             Debug.Assert(res);
         }
+
         private BitmapSource GetImage(IntPtr bm)
         {
             BitmapSource bmSource = Imaging.CreateBitmapSourceFromHBitmap(bm,
@@ -75,6 +78,7 @@ namespace RevitCopilot
             return bmSource;
         }
     }
+
     /// <summary>
     /// ボタンに実装するコマンド
     /// </summary>
