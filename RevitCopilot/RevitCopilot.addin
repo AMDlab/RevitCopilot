@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+	<AddIn Type="Application">
+		<Name>RevitCopilot</Name>
+		<Assembly>RevitCopilot\RevitCopilot.dll</Assembly>
+		<AddInId>B6A27CC9-BFD3-4030-9DC0-B97135405C8F</AddInId>
+		<FullClassName>RevitCopilot.RevitCopilotApp</FullClassName>
+		<VendorId>com.amd-lab</VendorId>
+		<VendorDescription>AMDlab Inc., https://amd-lab.com</VendorDescription>
+	</AddIn>
+</RevitAddIns>
