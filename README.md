@@ -6,7 +6,7 @@ Generation and execution of RevitAPI by ChatGPT
 MIT
 
 ## Blog
-https://amdlaboratory.com/?post_type=amdblog&p=18678&preview=true
+[【Revit×ChatGPT】ChatGPTにRevitを操作させる](https://amdlaboratory.com/amdblog/%e3%80%90revitxchatgpt%e3%80%91chatgpt%e3%81%abrevit%e3%82%92%e6%93%8d%e4%bd%9c%e3%81%95%e3%81%9b%e3%82%8b/)
 
 ## Author
 https://amd-lab.com/
