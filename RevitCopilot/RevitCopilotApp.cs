@@ -11,12 +11,13 @@ using System.Windows.Interop;
 
 namespace RevitCopilot
 {
-    public class RevitCopilotApp : IExternalApplication
+    public partial class RevitCopilotApp : IExternalApplication
     {
         public Result OnStartup(UIControlledApplication a)
         {
             // リボンパネルの作成
             RibbonPanel panel = a.CreateRibbonPanel("RevitCopilot");
+
             string dllPath = Assembly.GetExecutingAssembly().Location;
             PushButtonData button =
                 new PushButtonData("SwitchDisplayButton", "Switch Display", dllPath, "RevitCopilot.SwitchDisplay")
@@ -24,6 +25,13 @@ namespace RevitCopilot
                     LargeImage = GetImage(Resources.ChatgptLogo.GetHbitmap())
                 };
             panel.AddItem(button);
+
+            PushButtonData button2 =
+                new PushButtonData("RecVoiceButton", "Rec Voice", dllPath, "RevitCopilot.RecVoice")
+                {
+                    LargeImage = GetImage(Resources.ChatgptLogo.GetHbitmap())
+                };
+            panel.AddItem(button2);
 
             // DockablePaneの作成＆設定
             var dockablePane = new RevitCopilotView();
