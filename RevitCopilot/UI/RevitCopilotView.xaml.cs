@@ -12,6 +12,8 @@ namespace RevitCopilot.UI
         private readonly RevitCopilotViewModel vm = new RevitCopilotViewModel();
         private readonly AudioTranscription audioTranscription = new AudioTranscription();
 
+        LoadingWindow loadingWindow = null;
+
         public RevitCopilotViewModel GetVM() => vm;
 
         public RevitCopilotView()
@@ -30,16 +32,25 @@ namespace RevitCopilot.UI
             };
         }
 
-        private void BtnQueryChatGPT_Click(object sender, RoutedEventArgs e)
+        private async void BtnQueryChatGPT_Click(object sender, RoutedEventArgs e)
         {
             try
             {
+                // 読み込み中ウィンドウを表示
+                loadingWindow = new LoadingWindow();
+                loadingWindow.Show();
+
                 var chatGpt = new RevitCopilotManager();
-                vm.CsMethod = chatGpt.GetCsMethodByChatgpt(vm.Prompt);
+                vm.CsMethod = await chatGpt.GetCsMethodByChatgpt(vm.Prompt);
             }
             catch (Exception ex)
             {
                 TaskDialog.Show("Error", ex.Message);
+            }
+            finally
+            {
+                // 読み込み中ウィンドウを閉じる
+                loadingWindow?.Close();
             }
         }
 
@@ -47,8 +58,8 @@ namespace RevitCopilot.UI
         {
             try
             {
-                var compiler = new CompileManager();
-                compiler.Compile(vm.CsMethod);
+                var compiler = new RoslynCompiler();
+                compiler.CompileAndLoad(vm.CsMethod);
             }
             catch (Exception ex)
             {
@@ -58,8 +69,26 @@ namespace RevitCopilot.UI
 
         private async void BtnRecVoice_Down(object sender, RoutedEventArgs e)
         {
-            var text = await audioTranscription.StartRecording();
-            vm.Prompt = text;
+            try
+            {
+                audioTranscription.StartRecording();
+
+                // 読み込み中ウィンドウを表示
+                loadingWindow = new LoadingWindow();
+                loadingWindow.Show();
+
+                string transcribedText = await audioTranscription.TranscribeAudioAsync();
+                vm.Prompt = transcribedText;
+            }
+            catch (Exception ex)
+            {
+                TaskDialog.Show("Error", ex.Message);
+            }
+            finally
+            {
+                // 読み込み中ウィンドウを閉じる
+                loadingWindow?.Close();
+            }
         }
     }
 }

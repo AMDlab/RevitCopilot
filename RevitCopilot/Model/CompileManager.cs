@@ -1,6 +1,7 @@
 ﻿using Microsoft.CSharp;
 using System;
 using System.CodeDom.Compiler;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -21,7 +22,11 @@ namespace RevitCopilot.Model
             options.ReferencedAssemblies.AddRange(GetDllFileNames());
 
             // コンパイルを実行する
-            var provider = new CSharpCodeProvider();
+            var providerOptions = new Dictionary<string, string>
+            {
+                {"CompilerVersion", "v4.0"}  // これは .NET Framework 4.5 以上をターゲットとする C# 6.0 と互換性があります
+            };
+            var provider = new CSharpCodeProvider(providerOptions);
             CompilerResults results = provider.CompileAssemblyFromSource(options, csMethod);
 
             if (results.Errors.HasErrors)
@@ -52,7 +57,7 @@ namespace RevitCopilot.Model
                 }
                 // メソッドを呼び出す
                 var method = methods.First();
-                var result = method.Invoke(instance, new object[] { RevitDocuments.Doc });
+                method.Invoke(instance, new object[] { RevitDocuments.Doc });
             }
         }
         private string[] GetDllFileNames()

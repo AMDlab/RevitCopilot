@@ -26,16 +26,5 @@ namespace RevitCopilot
 			UiApp = new UIApplication( App );
 			return true;
 		}
-
-        private static string GetApikey()
-        {
-            var dllPath = Assembly.GetExecutingAssembly().Location;
-            var dllFolder = Path.GetDirectoryName(dllPath);
-            var resourcesFolder = Path.Combine(dllFolder, "Resources");
-            var apikeyPath = Path.Combine(resourcesFolder, "Apikey.json");
-            string json = File.ReadAllText(apikeyPath);
-            JObject jsonObj = JObject.Parse(json);
-            return jsonObj["Apikey"].ToString();
-        }
-    }
+	}
 }

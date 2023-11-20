@@ -1,33 +1,75 @@
-﻿using ChatGPT.API.Framework;
+﻿using System;
+using System.IO;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text.Json;
+using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
+using NAudio.Wave;
+using System.Reflection;
+using System.Text.Json.Serialization;
+using Autodesk.Revit.UI;
+using System.Windows;
+using System.Text;
+using System.Collections.Generic;
 
 namespace RevitCopilot.Model
 {
     public class RevitCopilotManager : OpenAIAPIModel
     {
-        public string GetCsMethodByChatgpt(string content)
+        public async Task<string> GetCsMethodByChatgpt(string content)
         {
-            var response = InqueryChatgpt(content);
+            var response = await InqueryChatgpt(content);
             var csMethod = GetCsMethodFromResponse(response);
             return csMethod;
         }
-        private string InqueryChatgpt(string content)
+
+        public async Task<string> InqueryChatgpt(string content)
         {
-            ChatGPTClient cgc = new ChatGPTClient(apikey);
-            cgc.CreateCompletions("hoge", 
-                "あなたはRevitアドインの開発者です。" +
+            var url = "https://api.openai.com/v1/chat/completions";
+            var model = "gpt-4-1106-preview";
+            var messages = new[]
+            {
+                new { role = "system", content = "あなたはRevitアドインの開発者です。" +
                 "ユーザーの問い合わせに返答するためのC#クラスとメソッドを作成してください。" +
                 "以下のルールを必ず守ってください。" +
                 "・クラスは1つのみ作成する" +
+                "・クラスのコンストラクタは記述しない" +
                 "・メソッドは、クラスメソッドとして1つのみ作成する" +
                 "・メソッドの引数は(Autodesk.Revit.DB.Document document)とする" +
                 "・static修飾子は使用しない"
-                );
-            var res = cgc.Ask("hoge", content);
-            if(res != null) { return res.GetMessageContent(); }
+                },
+                new { role = "user", content }
+            };
+
+            using (var httpClient = new HttpClient())
+            {
+                var requestData = new
+                {
+                    model,
+                    messages
+                };
+
+                var jsonContent = JsonSerializer.Serialize(requestData);
+                using (var stringContent = new StringContent(jsonContent, Encoding.UTF8, "application/json"))
+                {
+                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apikey);
+
+                    var response = await httpClient.PostAsync(url, stringContent);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseContent = await response.Content.ReadAsStringAsync();
+                        var gptResponse = JsonSerializer.Deserialize<Gpt4Response>(responseContent);
+                        return gptResponse?.Choices[0]?.Message?.Content;
+                    }
+                }
+            }
+
             return null;
         }
         private string GetCsMethodFromResponse(string response)
         {
+            if (string.IsNullOrEmpty(response)) return null;
             var rowList = response.Split('\n');
             bool isTarget = false;
             int staCounter = 0, endCounter = 0;
@@ -66,4 +108,62 @@ namespace RevitCopilot.Model
             return count;
         }
     }
+
+    public class Gpt4Response
+    {
+        [JsonPropertyName("id")]
+        public string Id { get; set; }
+
+        [JsonPropertyName("object")]
+        public string Object { get; set; }
+
+        [JsonPropertyName("created")]
+        public long Created { get; set; }
+
+        [JsonPropertyName("model")]
+        public string Model { get; set; }
+
+        [JsonPropertyName("choices")]
+        public List<Choice> Choices { get; set; }
+
+        [JsonPropertyName("usage")]
+        public Usage Usage { get; set; }
+
+        [JsonPropertyName("system_fingerprint")]
+        public string SystemFingerprint { get; set; }
+    }
+
+    public class Choice
+    {
+        [JsonPropertyName("index")]
+        public int Index { get; set; }
+
+        [JsonPropertyName("message")]
+        public Message Message { get; set; }
+
+        [JsonPropertyName("finish_reason")]
+        public string FinishReason { get; set; }
+    }
+
+    public class Message
+    {
+        [JsonPropertyName("role")]
+        public string Role { get; set; }
+
+        [JsonPropertyName("content")]
+        public string Content { get; set; }
+    }
+
+    public class Usage
+    {
+        [JsonPropertyName("prompt_tokens")]
+        public int PromptTokens { get; set; }
+
+        [JsonPropertyName("completion_tokens")]
+        public int CompletionTokens { get; set; }
+
+        [JsonPropertyName("total_tokens")]
+        public int TotalTokens { get; set; }
+    }
+
 }

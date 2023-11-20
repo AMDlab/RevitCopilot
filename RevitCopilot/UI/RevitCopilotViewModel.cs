@@ -18,22 +18,35 @@ namespace RevitCopilot.UI
         }
         private string csMethod =
             "using Autodesk.Revit.DB;" +
-            "\nusing Autodesk.Revit.UI;" +
-            "\n" +
-            "\npublic class WallCounter" +
-            "\n{" +
-            "\n    public void CountWalls(Document document)" +
-            "\n    {" +
-            "\n        // 壁のインスタンスを取得する" +
-            "\n        FilteredElementCollector collector = new FilteredElementCollector(document);" +
-            "\n        collector.OfCategory(BuiltInCategory.OST_Walls).WhereElementIsNotElementType();" +
-            "\n        int wallCount = collector.ToElements().Count;" +
-            "\n" +
-            "\n        // タスクダイアログに壁のインスタンス数を表示する" +
-            "\n        TaskDialog.Show(\"Wall Count\", \"The number of wall instances is \" + wallCount.ToString() + \".\");" +
-            "\n    }" +
-            "\n}" +
-            "\n";
+            "\r\nusing Autodesk.Revit.UI;" +
+            "\r\nusing System.Linq;" +
+            "\r\n" +
+            "\r\npublic class WallCounter" +
+            "\r\n{" +
+            "\r\n    private UIDocument uiDoc;" +
+            "\r\n" +
+            "\r\n    // コンストラクタで UIDocument を初期化します。" +
+            "\r\n    public WallCounter(UIDocument uiDocument)" +
+            "\r\n    {" +
+            "\r\n        this.uiDoc = uiDocument;" +
+            "\r\n    }" +
+            "\r\n" +
+            "\r\n    public void CountAndDisplayWalls(Document document)" +
+            "\r\n    {" +
+            "\r\n        // ドキュメントから壁のインスタンスを取得" +
+            "\r\n        FilteredElementCollector collector = new FilteredElementCollector(document);" +
+            "\r\n        collector.OfClass(typeof(Wall));" +
+            "\r\n" +
+            "\r\n        // 取得した壁の総数をカウント" +
+            "\r\n        int wallCount = collector.Count();" +
+            "\r\n" +
+            "\r\n        // タスクダイアログで結果を表示" +
+            "\r\n        TaskDialog taskDialog = new TaskDialog(\"壁インスタンスの件数\");" +
+            "\r\n        taskDialog.MainInstruction = \"壁インスタンスの数\";" +
+            "\r\n        taskDialog.MainContent = $\"プロジェクト内には合計 {wallCount} 個の壁インスタンスがあります。\";" +
+            "\r\n        taskDialog.Show();" +
+            "\r\n    }" +
+            "\r\n}";
         public string CsMethod
         {
             get => csMethod;

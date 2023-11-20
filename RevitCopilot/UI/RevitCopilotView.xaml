@@ -7,7 +7,7 @@
       mc:Ignorable="d"
       d:DataContext="{d:DesignInstance Type=ui:RevitCopilotViewModel}"
       Title="Revit Copilot Window"  
-      Height="559" Width="200"
+      Height="647" Width="200"
       Background="LightGray" >
     <DockPanel>
 
@@ -32,7 +32,7 @@
         <TextBlock x:Name="responceTitle" DockPanel.Dock="Top"  Margin="10"
                    Text="C# Method Response:" FontWeight="Bold"></TextBlock>
         <TextBox x:Name="responce" DockPanel.Dock="Top" Margin="10"
-                 TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Height="150"
+                 TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Height="291"
                  Text="{Binding Path=CsMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
         </TextBox>
 

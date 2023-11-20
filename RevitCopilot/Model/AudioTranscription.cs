@@ -17,7 +17,7 @@ public class AudioTranscription : OpenAIAPIModel
     private WaveFileWriter waveWriter;
     private readonly string wavPath = "C:\\temp\\test.wav";
 
-    public async Task<string> StartRecording()
+    public void StartRecording()
     {
         int deviceNumber = 0;
         waveIn = new WaveInEvent
@@ -37,14 +37,6 @@ public class AudioTranscription : OpenAIAPIModel
 
         waveWriter?.Close();
         waveWriter = null;
-
-        string transcribedText = await TranscribeAudioAsync();
-
-        if (!string.IsNullOrEmpty(transcribedText))
-        {
-            return transcribedText;
-        }
-        return null;
     }
 
     public async Task<string> TranscribeAudioAsync()
