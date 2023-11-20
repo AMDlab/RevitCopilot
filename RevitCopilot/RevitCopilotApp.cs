@@ -8,6 +8,7 @@ using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.UI;
 using RevitCopilot.Properties;
 using System.Windows.Interop;
+using RevitCopilot.UI;
 
 namespace RevitCopilot
 {
@@ -20,14 +21,14 @@ namespace RevitCopilot
 
             string dllPath = Assembly.GetExecutingAssembly().Location;
             PushButtonData button =
-                new PushButtonData("SwitchDisplayButton", "Switch Display", dllPath, "RevitCopilot.SwitchDisplay")
+                new PushButtonData("SwitchDisplayButton", "Switch Display", dllPath, "RevitCopilot.Commands.SwitchDisplay")
                 {
                     LargeImage = GetImage(Resources.ChatgptLogo.GetHbitmap())
                 };
             panel.AddItem(button);
 
             PushButtonData button2 =
-                new PushButtonData("RecVoiceButton", "Rec Voice", dllPath, "RevitCopilot.RecVoice")
+                new PushButtonData("RecVoiceButton", "Rec Voice", dllPath, "RevitCopilot.Commands.RecVoice")
                 {
                     LargeImage = GetImage(Resources.ChatgptLogo.GetHbitmap())
                 };
@@ -35,20 +36,7 @@ namespace RevitCopilot
 
             // DockablePaneの作成＆設定
             var dockablePane = new RevitCopilotView();
-            DockablePaneProviderData dockablePaneProviderData = new DockablePaneProviderData
-            {
-                FrameworkElement = dockablePane,
-                InitialState = new DockablePaneState
-                {
-                    DockPosition = DockPosition.Tabbed,
-                    TabBehind = DockablePanes.BuiltInDockablePanes.ProjectBrowser
-                }
-            };
-            dockablePane.SetupDockablePane(dockablePaneProviderData);
-
-            // DockablePaneの登録
-            DockablePaneId dpid = new DockablePaneId(new Guid("{D7C963CE-B7CA-426A-8D51-6E8254D21157}"));
-            a.RegisterDockablePane(dpid, "RevitCopilot Window", dockablePane);
+            SetCopilotPane(dockablePane, a);
 
             // イベント登録
             a.ControlledApplication.DocumentOpened += DocumentOpened;
@@ -85,30 +73,23 @@ namespace RevitCopilot
 
             return bmSource;
         }
-    }
 
-    /// <summary>
-    /// ボタンに実装するコマンド
-    /// </summary>
-    [Transaction(TransactionMode.ReadOnly)]
-    public class SwitchDisplay : IExternalCommand
-    {
-        public Result Execute(
-            ExternalCommandData commandData,
-            ref string message,
-            ElementSet elements)
+        public static void SetCopilotPane(RevitCopilotView view, UIControlledApplication a)
         {
+            DockablePaneProviderData dockablePaneProviderData = new DockablePaneProviderData
+            {
+                FrameworkElement = view,
+                InitialState = new DockablePaneState
+                {
+                    DockPosition = DockPosition.Tabbed,
+                    TabBehind = DockablePanes.BuiltInDockablePanes.ProjectBrowser
+                }
+            };
+            view.SetupDockablePane(dockablePaneProviderData);
+
+            // DockablePaneの登録
             DockablePaneId dpid = new DockablePaneId(new Guid("{D7C963CE-B7CA-426A-8D51-6E8254D21157}"));
-            DockablePane dp = commandData.Application.GetDockablePane(dpid);
-            if (dp.IsShown())
-            {
-                dp.Hide();
-            }
-            else
-            {
-                dp.Show();
-            }
-            return Result.Succeeded;
+            a.RegisterDockablePane(dpid, "RevitCopilot Window", view);
         }
     }
 }

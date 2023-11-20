@@ -2,7 +2,7 @@
 
 namespace RevitCopilot.Model
 {
-    public class RevitCopilotManager
+    public class RevitCopilotManager : OpenAIAPIModel
     {
         public string GetCsMethodByChatgpt(string content)
         {
@@ -12,7 +12,7 @@ namespace RevitCopilot.Model
         }
         private string InqueryChatgpt(string content)
         {
-            ChatGPTClient cgc = new ChatGPTClient("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+            ChatGPTClient cgc = new ChatGPTClient(apikey);
             cgc.CreateCompletions("hoge", 
                 "あなたはRevitアドインの開発者です。" +
                 "ユーザーの問い合わせに返答するためのC#クラスとメソッドを作成してください。" +

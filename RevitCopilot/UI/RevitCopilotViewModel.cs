@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace RevitCopilot
+namespace RevitCopilot.UI
 {
     public class RevitCopilotViewModel : INotifyPropertyChanged
     {

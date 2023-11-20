@@ -172,6 +172,9 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\SwitchDisplay.cs" />
+    <Compile Include="Model\OpenAIAPIModel.cs" />
+    <Compile Include="Model\AudioTranscription.cs" />
     <Compile Include="Model\ChatGptManager.cs" />
     <Compile Include="Model\CompileManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -187,12 +190,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="RecVoice.cs" />
+    <Compile Include="Commands\RecVoice.cs" />
     <Compile Include="RevitCopilotApp.cs" />
-    <Compile Include="RevitCopilotView.xaml.cs">
+    <Compile Include="UI\RevitCopilotView.xaml.cs">
       <DependentUpon>RevitCopilotView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RevitCopilotViewModel.cs" />
+    <Compile Include="UI\RevitCopilotViewModel.cs" />
     <Compile Include="RevitDocuments.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -213,7 +216,7 @@
     <Content Include="RevitCopilot.addin" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="RevitCopilotView.xaml">
+    <Page Include="UI\RevitCopilotView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

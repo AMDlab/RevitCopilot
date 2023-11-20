@@ -1,16 +1,23 @@
-﻿<Page x:Class="RevitCopilot.RevitCopilotView"
+﻿<Page x:Class="RevitCopilot.UI.RevitCopilotView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:ui="clr-namespace:RevitCopilot.UI"
+      mc:Ignorable="d"
+      d:DataContext="{d:DesignInstance Type=ui:RevitCopilotViewModel}"
       Title="Revit Copilot Window"  
       Height="559" Width="200"
       Background="LightGray" >
     <DockPanel>
-        
+
         <!-- Prompt input text box -->
         <TextBlock x:Name="pronptTitle" DockPanel.Dock="Top" Margin="10"
-                       Text="Pronpt" FontWeight="Bold"></TextBlock>
+                   Text="Pronpt" FontWeight="Bold"></TextBlock>
+        <Button x:Name="start_rec" DockPanel.Dock="Top" Margin="10"
+                Content="音声入力開始" Click="BtnRecVoice_Down">
+        </Button>
+        
         <TextBox x:Name="txtPromptInput" DockPanel.Dock="Top"  Margin="10"
                  TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Height="100"
                  Text="{Binding Path=Prompt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
@@ -23,7 +30,7 @@
 
         <!-- Code block to display and edit C# method response -->
         <TextBlock x:Name="responceTitle" DockPanel.Dock="Top"  Margin="10"
-                       Text="C# Method Response:" FontWeight="Bold"></TextBlock>
+                   Text="C# Method Response:" FontWeight="Bold"></TextBlock>
         <TextBox x:Name="responce" DockPanel.Dock="Top" Margin="10"
                  TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Height="150"
                  Text="{Binding Path=CsMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
@@ -36,9 +43,3 @@
 
     </DockPanel>
 </Page>
-
-
-
-
-
-

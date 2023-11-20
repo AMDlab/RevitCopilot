@@ -3,12 +3,14 @@ using RevitCopilot.Model;
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
-namespace RevitCopilot
+namespace RevitCopilot.UI
 {
     public partial class RevitCopilotView : Page, IDockablePaneProvider
     {
-        private RevitCopilotViewModel vm = new RevitCopilotViewModel();
+        private readonly RevitCopilotViewModel vm = new RevitCopilotViewModel();
+        private readonly AudioTranscription audioTranscription = new AudioTranscription();
 
         public RevitCopilotViewModel GetVM() => vm;
 
@@ -52,6 +54,12 @@ namespace RevitCopilot
             {
                 TaskDialog.Show("Error", ex.Message);
             }
+        }
+
+        private async void BtnRecVoice_Down(object sender, RoutedEventArgs e)
+        {
+            var text = await audioTranscription.StartRecording();
+            vm.Prompt = text;
         }
     }
 }

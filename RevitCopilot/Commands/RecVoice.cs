@@ -12,8 +12,9 @@ using System.Windows;
 using Newtonsoft.Json.Linq;
 using RevitCopilot.Properties;
 using System.Reflection;
+using RevitCopilot.UI;
 
-namespace RevitCopilot
+namespace RevitCopilot.Commands
 {
     /// <summary>
     /// ボタンに実装するコマンド
@@ -82,6 +83,7 @@ namespace RevitCopilot
             var url = "https://api.openai.com/v1/audio/transcriptions";
             var model = "whisper-1"; // 使用するモデル
 
+            var talked = string.Empty;
             using (var httpClient = new HttpClient())
             {
                 var fileStream = File.OpenRead(wavPath);
@@ -102,12 +104,13 @@ namespace RevitCopilot
                         // レスポンスをJSONとしてパースし、必要な情報を取得
                         var responseContent = response.Result.Content.ReadAsStringAsync();
                         var whisperResponse = JsonSerializer.Deserialize<WhisperResponse>(responseContent.Result);
-
+                        talked = whisperResponse.Text;
                         MessageBox.Show(whisperResponse.Text, "お前が喋った内容", MessageBoxButton.OK);
                     }
                     else
                     {
                         MessageBox.Show("失敗しました", "失敗しました", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return Result.Cancelled;
                     }
                 }
             }
