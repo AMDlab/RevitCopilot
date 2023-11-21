@@ -20,23 +20,23 @@ namespace RevitCopilot
             RibbonPanel panel = a.CreateRibbonPanel("RevitCopilot");
 
             string dllPath = Assembly.GetExecutingAssembly().Location;
-            PushButtonData button =
-                new PushButtonData("SwitchDisplayButton", "Switch Display", dllPath, "RevitCopilot.Commands.SwitchDisplay")
-                {
-                    LargeImage = GetImage(Resources.ChatgptLogo.GetHbitmap())
-                };
-            panel.AddItem(button);
+            //PushButtonData button =
+            //    new PushButtonData("SwitchDisplayButton", "Switch Display", dllPath, "RevitCopilot.Commands.SwitchDisplay")
+            //    {
+            //        LargeImage = GetImage(Resources.ChatgptLogo.GetHbitmap())
+            //    };
+            //panel.AddItem(button);
 
             PushButtonData button2 =
-                new PushButtonData("RecVoiceButton", "Rec Voice", dllPath, "RevitCopilot.Commands.RecVoice")
+                new PushButtonData("OpenCopilotWindowButton", "Open Copilot Window", dllPath, "RevitCopilot.Commands.OpenCopilotWindow")
                 {
                     LargeImage = GetImage(Resources.ChatgptLogo.GetHbitmap())
                 };
             panel.AddItem(button2);
 
             // DockablePaneの作成＆設定
-            var dockablePane = new RevitCopilotView();
-            SetCopilotPane(dockablePane, a);
+            //var dockablePane = new RevitCopilotPage();
+            //SetCopilotPane(dockablePane, a);
 
             // イベント登録
             a.ControlledApplication.DocumentOpened += DocumentOpened;
@@ -74,7 +74,7 @@ namespace RevitCopilot
             return bmSource;
         }
 
-        public static void SetCopilotPane(RevitCopilotView view, UIControlledApplication a)
+        public static void SetCopilotPane(RevitCopilotPage view, UIControlledApplication a)
         {
             DockablePaneProviderData dockablePaneProviderData = new DockablePaneProviderData
             {

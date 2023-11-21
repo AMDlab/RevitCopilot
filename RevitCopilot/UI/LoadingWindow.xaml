@@ -1,8 +1,10 @@
 ﻿<Window  x:Class="RevitCopilot.UI.LoadingWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Loading" Height="120" Width="300">
-    <Grid>
-        <ProgressBar IsIndeterminate="True" VerticalAlignment="Center"/>
-    </Grid>
+        Title="Loading" Height="70" Width="300"
+        Topmost="True" WindowStyle="None" WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+    <StackPanel>
+        <TextBlock Text="頑張っています..." HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
+        <ProgressBar IsIndeterminate="True" VerticalAlignment="Center" Height="20" />
+    </StackPanel>
 </Window>

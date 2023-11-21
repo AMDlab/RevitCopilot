@@ -12,6 +12,7 @@ using System.Windows;
 using Newtonsoft.Json.Linq;
 using RevitCopilot.Properties;
 using System.Reflection;
+using RevitCopilot.UI;
 
 namespace RevitCopilot.Commands
 {
@@ -19,22 +20,16 @@ namespace RevitCopilot.Commands
     /// ボタンに実装するコマンド
     /// </summary>
     [Transaction(TransactionMode.Manual)]
-    public class SwitchDisplay : IExternalCommand
+    public class OpenCopilotWindow : IExternalCommand
     {
-        public Result Execute(
-            ExternalCommandData commandData,
-            ref string message,
-            ElementSet elements)
+        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            DockablePaneId dpid = new DockablePaneId(new Guid("{D7C963CE-B7CA-426A-8D51-6E8254D21157}"));
-            DockablePane dp = commandData.Application.GetDockablePane(dpid);
-            if (dp.IsShown())
+            var view = new RevitCopilotWindow();
+            view.ShowDialog();
+            if (view.DoCompile)
             {
-                dp.Hide();
-            }
-            else
-            {
-                dp.Show();
+                var compiler = new RoslynCompiler();
+                compiler.CompileAndLoad(view.GetVM().CsMethod, commandData.Application.ActiveUIDocument.Document);
             }
             return Result.Succeeded;
         }

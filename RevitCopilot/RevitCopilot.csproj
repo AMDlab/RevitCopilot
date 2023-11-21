@@ -203,13 +203,17 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Commands\RecVoice.cs" />
+    <Compile Include="Commands\OpenCopilotWindow.cs" />
     <Compile Include="RevitCopilotApp.cs" />
+    <Compile Include="test.cs" />
     <Compile Include="UI\LoadingWindow.xaml.cs">
       <DependentUpon>LoadingWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\RevitCopilotView.xaml.cs">
-      <DependentUpon>RevitCopilotView.xaml</DependentUpon>
+    <Compile Include="UI\RevitCopilotWindow.xaml.cs">
+      <DependentUpon>RevitCopilotWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\RevitCopilotPage.xaml.cs">
+      <DependentUpon>RevitCopilotPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\RevitCopilotViewModel.cs" />
     <Compile Include="RevitDocuments.cs" />
@@ -236,7 +240,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UI\RevitCopilotView.xaml">
+    <Page Include="UI\RevitCopilotWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\RevitCopilotPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

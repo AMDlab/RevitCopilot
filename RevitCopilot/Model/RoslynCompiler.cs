@@ -8,10 +8,11 @@ using System.Collections.Generic;
 using System.Linq;
 using RevitCopilot;
 using System.CodeDom.Compiler;
+using Autodesk.Revit.DB;
 
 public class RoslynCompiler
 {
-    public void CompileAndLoad(string sourceCode)
+    public void CompileAndLoad(string sourceCode, Document revitDocument)
     {
         // C# コンパイル用のオプションを設定
         var syntaxTree = CSharpSyntaxTree.ParseText(sourceCode);
@@ -22,9 +23,12 @@ public class RoslynCompiler
             .ToList();
 
         // 基本的な .NET アセンブリの参照を追加
+        var assemblyDirectoryPath = Path.GetDirectoryName(typeof(object).Assembly.Location);
+        //references.Add(MetadataReference.CreateFromFile($"{assemblyDirectoryPath}/System.dll"));
         references.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location));
         references.Add(MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location));
         references.Add(MetadataReference.CreateFromFile(typeof(Exception).Assembly.Location));
+
 
         var compilationOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
         var compilation = CSharpCompilation.Create("DynamicAssembly", new[] { syntaxTree }, references, compilationOptions);
@@ -52,21 +56,21 @@ public class RoslynCompiler
             {
                 // コンパイルされたアセンブリから、クラスとメソッドを取得する
                 Assembly assembly = Assembly.Load(ms.ToArray());
-                var classTypes = assembly.GetTypes().Where(x => !x.Name.Contains("Attribute"));
+                var classTypes = assembly.GetTypes().Where(x => x.Name is "MyClass");
                 if (classTypes.Count() != 1)
                 {
-                    throw new Exception($"クラスが{classTypes.Count()}個存在している。");
+                    throw new Exception($"コンパイル用クラスが見つからない。");
                 }
                 var classType = classTypes.First();
                 var instance = Activator.CreateInstance(classType, null);
-                var methods = classType.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+                var methods = classType.GetMethods().Where(x => x.Name is "MyMethod");
                 if (methods.Count() != 1)
                 {
-                    throw new Exception($"メソッドが{methods.Count()}個存在している。");
+                    throw new Exception($"コンパイル用メソッドが見つからない。");
                 }
                 // メソッドを呼び出す
                 var method = methods.First();
-                method.Invoke(instance, new object[] { RevitDocuments.Doc });
+                method.Invoke(instance, new object[] { revitDocument });
             }
         }
 

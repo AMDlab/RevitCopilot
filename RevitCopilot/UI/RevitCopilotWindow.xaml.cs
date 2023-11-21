@@ -7,16 +7,18 @@ using System.Windows.Input;
 
 namespace RevitCopilot.UI
 {
-    public partial class RevitCopilotView : Page, IDockablePaneProvider
+    public partial class RevitCopilotWindow : Window
     {
         private readonly RevitCopilotViewModel vm = new RevitCopilotViewModel();
         private readonly AudioTranscription audioTranscription = new AudioTranscription();
 
         LoadingWindow loadingWindow = null;
 
+        public bool DoCompile { get; private set; } = false;
+
         public RevitCopilotViewModel GetVM() => vm;
 
-        public RevitCopilotView()
+        public RevitCopilotWindow()
         {
             InitializeComponent();
             this.DataContext = vm;
@@ -38,6 +40,7 @@ namespace RevitCopilot.UI
             {
                 // 読み込み中ウィンドウを表示
                 loadingWindow = new LoadingWindow();
+                loadingWindow.Owner = this;
                 loadingWindow.Show();
 
                 var chatGpt = new RevitCopilotManager();
@@ -58,8 +61,10 @@ namespace RevitCopilot.UI
         {
             try
             {
-                var compiler = new RoslynCompiler();
-                compiler.CompileAndLoad(vm.CsMethod);
+                // 設定をセーブ
+                Properties.Settings.Default.Save();
+                this.Close();
+                DoCompile = true;
             }
             catch (Exception ex)
             {
@@ -75,6 +80,7 @@ namespace RevitCopilot.UI
 
                 // 読み込み中ウィンドウを表示
                 loadingWindow = new LoadingWindow();
+                loadingWindow.Owner = this;
                 loadingWindow.Show();
 
                 string transcribedText = await audioTranscription.TranscribeAudioAsync();
