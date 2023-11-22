@@ -32,11 +32,10 @@ public class AudioTranscription : OpenAIAPIModel
 
     public void StartRecording()
     {
-        int deviceNumber = 0;
         waveIn = new WaveInEvent
         {
-            DeviceNumber = deviceNumber,
-            WaveFormat = new WaveFormat(44100, WaveIn.GetCapabilities(deviceNumber).Channels)
+            DeviceNumber = InputDeviceIndex,
+            WaveFormat = new WaveFormat(44100, WaveIn.GetCapabilities(InputDeviceIndex).Channels)
         };
 
         waveWriter = new WaveFileWriter(wavPath, waveIn.WaveFormat);
