@@ -29,5 +29,17 @@ namespace RevitCopilot.UI
                 Properties.Settings.Default.CsMethod = value;
             }
         }
+
+        private string inputDeviceName;
+
+        public string InputDeviceName
+        {
+            get => inputDeviceName;
+            set
+            {
+                inputDeviceName = value;
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(InputDeviceName)));
+            }
+        }
     }
 }

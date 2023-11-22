@@ -10,34 +10,40 @@
       Height="1100" Width="799"
       Background="LightGray" >
     <StackPanel>
-
         <!-- Prompt input text box -->
-        <TextBlock x:Name="pronptTitle" DockPanel.Dock="Top" Margin="10"
+        <TextBlock x:Name="pronptTitle" Margin="10"
                    Text="Pronpt" FontWeight="Bold"></TextBlock>
-        <Button x:Name="start_rec" DockPanel.Dock="Top" Margin="10"
+        <StackPanel Orientation="Horizontal">
+            <Button x:Name="start_rec" Margin="10" Width="400"
                 Content="音声入力開始" Click="BtnRecVoice_Down">
-        </Button>
+            </Button>
+            <TextBlock Margin="0,10,0,10" Text="入力デバイス : " FontWeight="Bold"></TextBlock>
+            <TextBlock Margin="0,10,0,10" Text="{Binding InputDeviceName}" FontWeight="Bold"></TextBlock>
+            <Button x:Name="changeDevice" Margin="10"
+                Content="入力デバイス切り替え" Click="BtnChangeInputDevice">
+            </Button>
+        </StackPanel>
 
-        <TextBox x:Name="txtPromptInput" DockPanel.Dock="Top"  Margin="10"
+        <TextBox x:Name="txtPromptInput"  Margin="10"
                  TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Height="59"
                  Text="{Binding Path=Prompt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
         </TextBox>
 
         <!-- Query ChatGPT button -->
-        <Button x:Name="pronpt" DockPanel.Dock="Top"  Margin="10"
+        <Button x:Name="pronpt"  Margin="10"
                 Content="Query ChatGPT" Click="BtnQueryChatGPT_Click" Height="20">
         </Button>
 
         <!-- Code block to display and edit C# method response -->
-        <TextBlock x:Name="responceTitle" DockPanel.Dock="Top"  Margin="10"
+        <TextBlock x:Name="responceTitle"  Margin="10"
                    Text="C# Method Response:" FontWeight="Bold"></TextBlock>
-        <TextBox x:Name="responce" DockPanel.Dock="Top" Margin="10"
+        <TextBox x:Name="responce" Margin="10"
                  TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"
                  Text="{Binding Path=CsMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="700">
         </TextBox>
 
         <!-- Execute C# method button -->
-        <Button x:Name="btnExecuteCSharpMethod" DockPanel.Dock="Top" Margin="10"
+        <Button x:Name="btnExecuteCSharpMethod" Margin="10"
                 Content="Execute C# Method" Click="BtnExecuteCSharpMethod_Click" Height="20">
         </Button>
 

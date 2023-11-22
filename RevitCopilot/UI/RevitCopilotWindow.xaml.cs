@@ -12,6 +12,7 @@ namespace RevitCopilot.UI
         private readonly RevitCopilotViewModel vm = new RevitCopilotViewModel();
         private readonly AudioTranscription audioTranscription = new AudioTranscription();
 
+
         LoadingWindow loadingWindow = null;
 
         public bool DoCompile { get; private set; } = false;
@@ -95,6 +96,11 @@ namespace RevitCopilot.UI
                 // 読み込み中ウィンドウを閉じる
                 loadingWindow?.Close();
             }
+        }
+
+        private void BtnChangeInputDevice(object sender, RoutedEventArgs e)
+        {
+            vm.InputDeviceName = audioTranscription.IncrementInputDeviceIndexAndGetPuroductName();
         }
     }
 }

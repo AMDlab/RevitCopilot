@@ -17,6 +17,19 @@ public class AudioTranscription : OpenAIAPIModel
     private WaveFileWriter waveWriter;
     private readonly string wavPath = "C:\\temp\\test.wav";
 
+    private int InputDeviceIndex { get; set; } = 0;
+
+    public string IncrementInputDeviceIndexAndGetPuroductName()
+    {
+        InputDeviceIndex++;
+        if (InputDeviceIndex >= WaveInEvent.DeviceCount)
+        {
+            InputDeviceIndex = 0;
+        }
+        var capabilities = WaveInEvent.GetCapabilities(InputDeviceIndex);
+        return capabilities.ProductName;
+    }
+
     public void StartRecording()
     {
         int deviceNumber = 0;
