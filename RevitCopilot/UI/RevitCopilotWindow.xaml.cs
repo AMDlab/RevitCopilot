@@ -23,6 +23,7 @@ namespace RevitCopilot.UI
         {
             InitializeComponent();
             this.DataContext = vm;
+            vm.InputDeviceName = audioTranscription.GetPuroductName();
         }
 
         public void SetupDockablePane(DockablePaneProviderData data)

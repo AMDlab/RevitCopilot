@@ -38,6 +38,7 @@ namespace RevitCopilot.Model
                 "・メソッドは、クラスメソッドとして1つのみ作成し、メソッド名は[MyMethod]とする" +
                 "・メソッドの引数は(Autodesk.Revit.DB.Document document)とする" +
                 "・メソッドはtry-catchで例外処理を行い、例外が発生した場合はメッセージとして表示する" +
+                "・using System;を必ず記述する" +
                 "・メッセージを表示する際はTaskDialogを利用する" +
                 "・static修飾子は使用しない"
                 },

@@ -7,44 +7,48 @@
       mc:Ignorable="d"
       d:DataContext="{d:DesignInstance Type=ui:RevitCopilotViewModel}"
       Title="Revit Copilot Window"  
-      Height="1100" Width="799"
+      Height="1230" Width="800"
       Background="LightGray" >
     <StackPanel>
         <!-- Prompt input text box -->
-        <TextBlock x:Name="pronptTitle" Margin="10"
-                   Text="Pronpt" FontWeight="Bold"></TextBlock>
+        <TextBlock x:Name="pronptTitle" Margin="10,10,10,0" FontSize="15"
+                   Text="プロンプト :" FontWeight="Bold"></TextBlock>
         <StackPanel Orientation="Horizontal">
-            <Button x:Name="start_rec" Margin="10" Width="400"
-                Content="音声入力開始" Click="BtnRecVoice_Down">
+            <Button x:Name="start_rec" Margin="10,10,10,0" Width="400" Height="40" FontSize="15"
+                Content="音声入力開始 by WhisperAPI" Click="BtnRecVoice_Down">
             </Button>
-            <TextBlock Margin="0,10,0,10" Text="入力デバイス : " FontWeight="Bold"></TextBlock>
-            <TextBlock Margin="0,10,0,10" Text="{Binding InputDeviceName}" FontWeight="Bold"></TextBlock>
-            <Button x:Name="changeDevice" Margin="10"
-                Content="入力デバイス切り替え" Click="BtnChangeInputDevice">
-            </Button>
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="入力デバイス : " FontWeight="Bold"></TextBlock>
+                    <TextBlock Text="{Binding InputDeviceName}" FontWeight="Bold"></TextBlock>
+                </StackPanel>
+                <Button x:Name="changeDevice" Margin="10,10,10,0"  Height="25"
+                        Content="入力デバイス切り替え" Click="BtnChangeInputDevice" Width="128">
+                </Button>
+            </StackPanel>
         </StackPanel>
 
-        <TextBox x:Name="txtPromptInput"  Margin="10"
+        <TextBox x:Name="txtPromptInput" Margin="10,10,10,0" FontSize="15"
                  TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Height="59"
                  Text="{Binding Path=Prompt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
         </TextBox>
 
         <!-- Query ChatGPT button -->
-        <Button x:Name="pronpt"  Margin="10"
-                Content="Query ChatGPT" Click="BtnQueryChatGPT_Click" Height="20">
+        <Button x:Name="pronpt"  Margin="10,10,10,10" FontSize="15"
+                Content="GPTにコードを書かせる" Click="BtnQueryChatGPT_Click" Height="40">
         </Button>
 
         <!-- Code block to display and edit C# method response -->
-        <TextBlock x:Name="responceTitle"  Margin="10"
-                   Text="C# Method Response:" FontWeight="Bold"></TextBlock>
+        <TextBlock x:Name="responceTitle"  Margin="10,10,10,0" FontSize="15"
+                   Text="GPTが書いたRevitAPIコード :" FontWeight="Bold"></TextBlock>
         <TextBox x:Name="responce" Margin="10"
-                 TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"
-                 Text="{Binding Path=CsMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="700">
+                 TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" FontSize="15"
+                 Text="{Binding Path=CsMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="850">
         </TextBox>
 
         <!-- Execute C# method button -->
-        <Button x:Name="btnExecuteCSharpMethod" Margin="10"
-                Content="Execute C# Method" Click="BtnExecuteCSharpMethod_Click" Height="20">
+        <Button x:Name="btnExecuteCSharpMethod" Margin="10" FontSize="15"
+                Content="実行！" Click="BtnExecuteCSharpMethod_Click" Height="40">
         </Button>
 
     </StackPanel>

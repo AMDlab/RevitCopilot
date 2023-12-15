@@ -26,6 +26,11 @@ public class AudioTranscription : OpenAIAPIModel
         {
             InputDeviceIndex = 0;
         }
+        return GetPuroductName();
+    }
+
+    public string GetPuroductName()
+    {
         var capabilities = WaveInEvent.GetCapabilities(InputDeviceIndex);
         return capabilities.ProductName;
     }

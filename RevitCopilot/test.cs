@@ -1,7 +1,7 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using System;
-using System.Linq;
+using System.Collections.Generic;
 
 public class MyClass
 {
@@ -9,41 +9,30 @@ public class MyClass
     {
         try
         {
-            // Autodesk.Revit.DB.Transactionを始めます。
-            Transaction trans = new Transaction(document, "Create Walls");
-            trans.Start();
+            // 壁の種類を収集するためのフィルタを作成
+            FilteredElementCollector collector = new FilteredElementCollector(document);
+            collector.OfClass(typeof(WallType));
 
-            // 壁の開始点と終了点を定義します。例えば、0,0 より 10フィートの距離の壁を作成します。
-            // これは単純な例であり、実際にはユーザーが指定する値を利用する可能性があります。
-            XYZ start = XYZ.Zero; // 壁の開始点
-            XYZ end = new XYZ(0, 10, 0); // 壁の終了点 (10フィート)
+            // 収集した壁の種類の名前を格納するためのリストを作成
+            List<string> wallTypeNames = new List<string>();
 
-            // 壁のタイプとレベルを指定します。
-            WallType wallType = new FilteredElementCollector(document)
-                .OfClass(typeof(WallType))
-                .FirstOrDefault() as WallType; // 壁のタイプを取得
-
-            Level level = new FilteredElementCollector(document)
-                .OfClass(typeof(Level))
-                .FirstOrDefault() as Level; // レベルを取得
-
-            // 壁を作成します。
-            if (wallType != null && level != null)
+            // 各壁の種類に対して
+            foreach (WallType wallType in collector)
             {
-                Wall.Create(document, Line.CreateBound(start, end), wallType.Id, level.Id, 10, 0, false, false);
-            }
-            else
-            {
-                throw new InvalidOperationException("Cannot find wall type or level required for wall creation.");
+                // 壁の種類の名前をリストに追加
+                wallTypeNames.Add(wallType.Name);
             }
 
-            // トランザクションを終了します。
-            trans.Commit();
+            // リストの内容を改行で連結して1つの文字列にする
+            string message = string.Join("\n", wallTypeNames);
+
+            // TaskDialogを使用して壁の種類を表示
+            TaskDialog.Show("Available Wall Types", message);
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            // 例外が発生した場合、TaskDialogを利用してメッセージを表示します。
-            TaskDialog.Show("Error", e.Message);
+            // 例外が発生した場合、TaskDialogを使用してエラーメッセージを表示
+            TaskDialog.Show("Error", "An error occurred: " + ex.Message);
         }
     }
 }
